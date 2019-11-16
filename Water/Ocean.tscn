@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Water/OceanShader.tres" type="Material" id=1]
+[ext_resource path="res://Water/Projected-grid.gd" type="Script" id=2]
+[ext_resource path="res://Water/CubeCamera.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="BoxShape" id=2]
+
+[node name="OceanCollection" type="Node"]
+
+[node name="Ocean" type="ImmediateGeometry" parent="."]
+material_override = ExtResource( 1 )
+script = ExtResource( 2 )
+wavelength = 40.0
+steepness = 0.0
+amplitude = 0.3
+wind_align = 0.1
+noise_amplitude = 1.5
+noise_frequency = 0.025
+noise_speed = 0.4
+seed_value = 5
+
+[node name="CubeCamera" parent="." instance=ExtResource( 3 )]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 100000, 0, 0, 0, 1, 0, 0, 0, 100000, 0, -100, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
+shape = SubResource( 2 )

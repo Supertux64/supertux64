@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="ProceduralSky" id=1]
+ground_horizon_color = Color( 0.776471, 0.886275, 0.992157, 1 )
+ground_curve = 0.0721001
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+fog_enabled = true
+fog_color = Color( 0.25098, 0.403922, 0.584314, 1 )
+fog_depth_enabled = false
+fog_depth_end = 50.0
+fog_transmit_enabled = true
+fog_height_enabled = true
+fog_height_max = -10.0
+ssao_edge_sharpness = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource( 2 )
