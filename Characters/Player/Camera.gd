@@ -1,8 +1,5 @@
 extends Camera
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 onready var parent = get_node("..")
 var pos = Vector3(0, 0, -20)
 var truepos = pos
@@ -14,10 +11,10 @@ var interpSpeed = 0.5
 onready var mousepos = get_viewport().get_mouse_position()
 onready var mousedelta = get_viewport().get_mouse_position()
 
-#USED FOR lockedDirection, fixedHeight, free
+# USED FOR lockedDirection, fixedHeight, free
 var dist = 20
 var mindist = 10
-var maxdist = 200
+var maxdist = 25
 
 # USED FOR fixedHeight
 var height = 10
@@ -34,6 +31,16 @@ var distFromPlayer = Vector3(0, 0, -20).normalized()
 enum state{free,fixedHeight,lockedToPos,lockedDirection,interpolateTo}
 var camState=state.lockedDirection
 var canMoveCamWithMouse = true
+
+# FOR INTERPOLATION
+var startLookAt
+var startPos
+var endLookAt
+var endPos
+var time
+var elapsed = 0
+var nextMode
+var nextcanMoveCamWithMouse
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -62,11 +69,11 @@ func _process(delta):
 			pos -= (get_global_transform().basis.z * -GLOBAL.anti_up()).rotated(GLOBAL.up, PI/2)*mousedelta.x*camDir/10
 			pos += GLOBAL.up*mousedelta.y/10*camDir2
 	
-	if Input.is_action_just_released("ST_zoom_in"):
+	if Input.is_action_just_released("ST_zoom_in") && canMoveCamWithMouse:
 		dist /= 1.4
 		dist = max(dist, mindist)
 		
-	if Input.is_action_just_released("ST_zoom_out"):
+	if Input.is_action_just_released("ST_zoom_out") && canMoveCamWithMouse:
 		dist *= 1.4
 		dist = min(dist, maxdist)
 	
@@ -81,6 +88,15 @@ func _process(delta):
 			pos = pos.normalized()*dist + GLOBAL.up*height + parent.translation
 		state.lockedDirection:
 			pos = parent.translation + distFromPlayer.normalized() * dist
+		state.interpolateTo:
+			elapsed += delta
+			var progress = elapsed / time
+			if (progress >= 1):
+				camState = nextMode
+				canMoveCamWithMouse = nextcanMoveCamWithMouse
+				distFromPlayer = (translation - parent.translation).normalized()
+			else:
+				pos = startPos + (endPos - startPos)*progress
 	
 	# interpSpeed = 1 - (1 / pow(truepos.distance_to(pos), 2))
 	
@@ -88,11 +104,13 @@ func _process(delta):
 	# Manage underwater cam
 	var waterY = get_node("../../../OceanCollection/Ocean").get_displace(Vector2(get_global_transform().origin.x, get_global_transform().origin.z)).y
 	
-	if !GLOBAL.camCanBeUnderwaterWithoutPlayer:
+	if !GLOBAL.camCanBeUnderwaterWithoutPlayer && camState == state.free:
 		if get_parent().isDiving():
 			pos.y = min(pos.y, waterY - 2)
+			truepos.y = min(truepos.y, waterY - 2)
 		else:
 			pos.y = max(pos.y, waterY + 2)
+			truepos.y = max(truepos.y, waterY + 2)
 			
 	
 	truepos = truepos * (1-interpSpeed) + pos * interpSpeed
@@ -101,6 +119,22 @@ func _process(delta):
 	
 	# Manage underwater visual effects
 	_getEnvironment().environment.fog_depth_enabled = waterY > get_global_transform().origin.y
+	
+	# Manage water sound
+	#_getWaterSound().volume_db = -log(get_global_transform().origin.y)
 
 func _getEnvironment():
 	return get_node("../../../WorldEnvironment")
+
+#func _getWaterSound():
+#	return get_node("../../../OceanCollection/WaterSound")
+
+#func setInterpolate(startAt, startLook, endAt, endLook, setTimeAt):
+func setInterpolate(startAt, setTimeAt, nextstate := state.lockedDirection):
+	startPos = startAt
+	endPos = parent.translation + (startAt - parent.translation).normalized()*dist
+	time = setTimeAt
+	nextMode = nextstate
+	nextcanMoveCamWithMouse = canMoveCamWithMouse
+	canMoveCamWithMouse = false
+	camState = state.interpolateTo

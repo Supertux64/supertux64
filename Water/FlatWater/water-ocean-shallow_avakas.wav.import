@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/water-ocean-shallow_avakas.wav-b64dc5e785f8b2c72b7adf7931c542eb.sample"
+
+[deps]
+
+source_file="res://Water/FlatWater/water-ocean-shallow_avakas.wav"
+dest_files=[ "res://.import/water-ocean-shallow_avakas.wav-b64dc5e785f8b2c72b7adf7931c542eb.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=true
+compress/mode=0

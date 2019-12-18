@@ -16,6 +16,9 @@ _global_script_class_icons={
 [application]
 
 config/name="SuperTux 64"
+run/main_scene="res://Levels/Experimental/Basic.tscn"
+boot_splash/image="res://Banner.png"
+boot_splash/bg_color=Color( 0.121569, 0.152941, 0.196078, 1 )
 config/icon="res://icon.png"
 
 [autoload]

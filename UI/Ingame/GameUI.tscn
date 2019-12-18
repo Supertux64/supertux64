@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://UI/Ingame/GameUI.gd" type="Script" id=1]
+[ext_resource path="res://UI/Ingame/coin.png" type="Texture" id=2]
+[ext_resource path="res://UI/Ingame/soupofjustice.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 720
+outline_size = 80
+outline_color = Color( 0.945098, 1, 0, 1 )
+font_data = ExtResource( 3 )
+
+[node name="GameUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Health" type="ProgressBar" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -150.0
+margin_top = -20.0
+custom_colors/font_color = Color( 0.25098, 0.498039, 0.282353, 1 )
+custom_colors/font_color_shadow = Color( 0.0784314, 0.12549, 0.0941176, 1 )
+max_value = 6.0
+step = 1.0
+value = 6.0
+rounded = true
+percent_visible = false
+
+[node name="Coin" type="TextureRect" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -125.0
+margin_top = -125.0
+margin_right = 875.0
+margin_bottom = 875.0
+rect_scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+
+[node name="Count" type="Label" parent="Coin"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2750.0
+margin_top = -750.0
+margin_right = -750.0
+margin_bottom = 250.0
+custom_fonts/font = SubResource( 1 )
+text = "0"
+align = 2
+valign = 2

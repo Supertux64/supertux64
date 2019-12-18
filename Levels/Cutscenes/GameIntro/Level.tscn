@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Levels/Cutscenes/GameIntro/Level.gd" type="Script" id=1]
+[ext_resource path="res://WorldEnvironments/Generic/Generic.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Levels/Cutscenes/GameIntro/terrain.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Water/FlatWater/WaterFlat.tscn" type="PackedScene" id=4]
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 2
+emission_box_extents = Vector3( 30, 30, 30 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 3.0
+angular_velocity = 1.61149e-43
+
+[sub_resource type="SphereMesh" id=2]
+radius = 0.03
+height = 0.06
+radial_segments = 4
+rings = 1
+
+[node name="Level" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 2 )]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, -0.766044, 22.2052, 19.5591, -9.48182 )
+current = true
+far = 8192.0
+
+[node name="Particles" type="Particles" parent="Camera"]
+transform = Transform( -0.766044, -0.642788, 2.80972e-08, 0, -4.37114e-08, -1, 0.642788, -0.766044, 3.34849e-08, 0, 0, 0 )
+amount = 9999
+lifetime = 10.0
+visibility_aabb = AABB( -15, -15, -15, 30, 30, 30 )
+process_material = SubResource( 1 )
+draw_pass_1 = SubResource( 2 )
+
+[node name="Scene Root" parent="." instance=ExtResource( 3 )]
+
+[node name="OceanCollection" parent="." instance=ExtResource( 4 )]
