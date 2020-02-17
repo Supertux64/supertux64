@@ -122,7 +122,7 @@ func _physics_process(delta):
 		lookingat /=2
 		lookingat = lookingat.normalized()
 		
-		look_at(getPos()-GLOBAL.up, -lookingat)
+		look_at(getPos()-GLOBAL.up, Vector3(lookingat.x, lookingat.y, -lookingat.z))
 		
 		# Now let's manage jumps :))))))))))))))))))))))
 		if usable && (Input.is_action_just_pressed("ST_Jump") || shouldRejump):

@@ -15,6 +15,7 @@ fog_depth_enabled = false
 fog_depth_end = 50.0
 fog_transmit_enabled = true
 fog_height_enabled = true
+fog_height_min = 0.0
 fog_height_max = -10.0
 ssao_edge_sharpness = 0.0
 glow_intensity = 0.33
